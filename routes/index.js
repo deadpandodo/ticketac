@@ -43,8 +43,6 @@ router.get('/save', async function(req, res, next) {
   }
   res.render('index', { title: 'Express' });
 });
-
-
 // Cette route est juste une verification du Save.
 // Vous pouvez choisir de la garder ou la supprimer.
 router.get('/result', function(req, res, next) {
@@ -66,5 +64,7 @@ router.get('/result', function(req, res, next) {
 
   res.render('index', { title: 'Express' });
 });
+
+
 
 module.exports = router;
