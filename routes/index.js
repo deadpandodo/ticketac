@@ -9,18 +9,57 @@ var date = ["2018-11-20","2018-11-21","2018-11-22","2018-11-23","2018-11-24"]
 
 
 
-/* SIGNIN/SIGNUP. */
+/* INDEX */
 router.get('/', function(req, res, next) {
   res.render('index', { });
 });
+
+
+/* SIGNUP */
+router.post('/signup', async function(req, res, next) {
+
+  console.log(req.body)
+  var user = userModel.findOne({email: req.body.email, password: req.body.password})
+
+  var newUser = new userModel ({
+    email: req.body.email,
+    lastname: req.body.lastname,
+    firstname: req.body.firstname,
+    password: req.body.password
+    });
+  var userSaved = await newUser.save();
+
+
+  res.render('index', {});
+});
+
+
+/* SIGNIN */
+router.post('/signin', async function(req, res, next) {
+
+  console.log(req.body)
+  var user = await userModel.findOne({email: req.body.email, password: req.body.password})
+  console.log(user)
+  if (user === null) {
+    res.redirect('/')
+  } else {
+    res.render('homepage', {});
+  }
+});
+
 
 /* SEARCH PAGE */
 router.get('/homepage', function(req, res, next) {
   res.render('homepage', {  });
 });
 
+
 /* RESULT : Either no train or show the trains */
-router.get('/result', function(req, res, next) {
+router.post('/search-trip', async function(req, res, next) {
+
+  console.log(req.body)
+
+
   res.render('result', {  });
 });
 
