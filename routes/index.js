@@ -9,15 +9,19 @@ var date = ["2018-11-20","2018-11-21","2018-11-22","2018-11-23","2018-11-24"]
 
 
 
-/* GET home page. */
+/* SIGNIN/SIGNUP. */
 router.get('/', function(req, res, next) {
   res.render('index', { });
 });
 
-
-/* GET home page. */
+/* SEARCH PAGE */
 router.get('/homepage', function(req, res, next) {
   res.render('homepage', {  });
+});
+
+/* RESULT : Either no train or show the trains */
+router.get('/result', function(req, res, next) {
+  res.render('result', {  });
 });
 
 
