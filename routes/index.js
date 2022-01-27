@@ -78,9 +78,18 @@ router.post('/search-trip', async function(req, res, next) {
   })
   console.log(journeys_found)
 
-  res.render('result', { journeys:journeys_found });
+  res.render('result', { journeys:journeys_found, date:hack_date });
 });
 
+
+/* RESULT : Either no train or show the trains */
+router.get('/add-trip-to-basket', function(req, res, next) {
+
+  console.log(req.query)
+
+  var basket = []
+  res.render('basket', { basket: basket });
+});
 
 
 
