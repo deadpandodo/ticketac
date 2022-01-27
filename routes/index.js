@@ -83,11 +83,34 @@ router.post('/search-trip', async function(req, res, next) {
 
 
 /* RESULT : Either no train or show the trains */
-router.get('/add-trip-to-basket', function(req, res, next) {
+router.get('/add-trip-to-basket', async function(req, res, next) {
 
   console.log(req.query)
 
+  if (req.session.planned_trips === undefined) {
+    req.session.planned_trips = []
+  } else {
+    
+  }
+  req.session.planned_trips.push(req.query.id)
+
+  // Fetch data of the planned_trips
   var basket = []
+
+  for (let i=0; i<req.session.planned_trips.length;i++) {
+    basket[i] = await journeyModel.findById(req.session.planned_trips[i])
+  }
+
+  console.log(basket)
+
+
+
+
+
+
+
+
+ 
   res.render('basket', { basket: basket });
 });
 
