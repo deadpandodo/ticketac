@@ -1,4 +1,5 @@
 var journeyModel = require("../models/journeys")
+var userModel = require("../models/users")
 var express = require('express');
 var router = express.Router();
 
