@@ -20,6 +20,12 @@ router.get('/', function(req, res, next) {
   res.render('index', { });
 });
 
+router.get('/logout', function(req, res, next) {
+  req.session.user = []
+  req.session.user_logged = false
+  res.redirect('/');
+});
+
 
 /* SIGNUP */
 router.post('/signup', async function(req, res, next) {

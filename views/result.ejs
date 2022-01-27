@@ -21,13 +21,16 @@
           <% if (journeys.length === 0) { %>
 
               <h1>Oops ! No trains available...</h1>
-              <a class="btn-danger" href="homepage" value="Home">Home</a>
+              <div class="d-flex flex-column justify-content-center">
+                <a class="btn btn-danger" href="homepage" value="Home">Find another one !</a>
+              </div>
+              
 
           <% } else { %>
               
               <h1>Tickets available on the <%= date %></h1>
               <% for (let i=0; i<journeys.length;i++) { %>
-                <div class="row ticket-option pt-5 pb-5 px-4 d-flex align-items-center">
+                <div class="row bg-white mt-1 pt-5 pb-5 px-4 d-flex align-items-center">
                   <div class="col-3 d-flex justify-content-left">
                     <h5><%= journeys[i].departure %> / <%= journeys[i].arrival %></h5>
                   </div>
