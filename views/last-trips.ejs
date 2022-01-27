@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <%- include("_head") %> 
+  <body>
+    <%- include("_navbar") %>
+
+   
+    <div class="container">
+      
+      
+      
+      <div class="row d-flex justify-content-center align-items-center mt-5">
+        <div class="col-10 mt-5 ">
+
+          <% if (last_trips.length === 0) { %>
+            <div class="d-flex flex-column justify-content-center">
+              <h1>Oh, no trips !</h1>
+              <a class="btn btn-danger" href="homepage">Add a trip !</a>
+            </div>
+              
+
+          <% } else { %>
+              
+              <h1>My last trips :</h1>
+              <table class="table table-light table-borderless">
+                <thead>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Journey</th>
+                    <th scope="col">Departure time</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                
+
+                <tbody>
+                  <%  for (let i=0; i<last_trips.length;i++) { %>
+                    <tr>
+                      <th scope="row"><%= last_trips[i].date %></th>
+                      <td><%= last_trips[i].departure %> / <%= last_trips[i].arrival %></td>
+                      <td><%= last_trips[i].departureTime %></td>
+                      <td><%= last_trips[i].price %> €</td>
+                    </tr>
+                  <% } %>
+                </tbody>
+
+              </table>
+
+          <% } %>
+          
+        </div>
+      </div>
+
+      <div class="row mt-2 mb-5 p-3 ">
+        <div class="col-6 d-flex justify-content-start">
+          <a class="btn btn-info" href="" >Add another trip</a>
+        </div>        
+      </div>
+
+
+    </div>
+
+
+
+
+    <%- include("_scripts") %>   
+  </body>
+</html>

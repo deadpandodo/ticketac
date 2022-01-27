@@ -9,8 +9,9 @@ var date = ["2018-11-20","2018-11-21","2018-11-22","2018-11-23","2018-11-24"]
 
 /* 
 TODO
-- User Sessions
-- take care of dates in basket
+- User Sessions (stock also the id for the calls)
+- take care of dates in basket & last trips
+- style the nav items
 
  */
 
@@ -113,9 +114,45 @@ router.get('/add-trip-to-basket', async function(req, res, next) {
 });
 
 
+/* PAYMENT CONFIRM */
+router.get('/payment-confirm', async function(req, res, next) {
 
+  console.log(req.query.data)
+  var trips_to_save = JSON.parse(req.query.data)
+  console.log(trips_to_save)
+  
 
+  var fake_id = "61f27f8b864b0c0b1e5c73bf"
+  // Fetch user
+  var user = await userModel.findById(fake_id)
 
+  // Update user trips
+  for (let i=0; i<trips_to_save.length;i++){
+    user.trips.push(trips_to_save[i])
+  }
+
+  // Save user trips
+  await userModel.updateOne(
+    { _id: fake_id},
+    { trips: user.trips }
+ );
+
+ 
+  res.render('payment-confirm', {});
+});
+
+/* LAST TRIPS */
+router.get('/last-trips', async function(req, res, next) {
+
+  console.log(req.query.data)
+  
+  var fake_id = "61f27f8b864b0c0b1e5c73bf"
+  var user_data = await userModel.findById(fake_id)
+  var last_trips = user_data.trips
+  console.log(last_trips)
+ 
+  res.render('last-trips', {last_trips:last_trips});
+});
 
 
 
