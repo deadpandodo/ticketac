@@ -1,5 +1,6 @@
 var journeyModel = require("../models/journeys")
 var userModel = require("../models/users")
+
 var express = require('express');
 var router = express.Router();
 
@@ -14,8 +15,28 @@ router.get('/', function(req, res, next) {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Remplissage de la base de donnée, une fois suffit
-router.get('/save', async function(req, res, next) {
+/* router.get('/save', async function(req, res, next) {
 
   // How many journeys we want
   var count = 300
@@ -42,10 +63,11 @@ router.get('/save', async function(req, res, next) {
 
   }
   res.render('index', { title: 'Express' });
-});
+}); */
 // Cette route est juste une verification du Save.
 // Vous pouvez choisir de la garder ou la supprimer.
-router.get('/result', function(req, res, next) {
+
+/* router.get('/result', function(req, res, next) {
 
   // Permet de savoir combien de trajets il y a par ville en base
   for(i=0; i<city.length; i++){
@@ -63,7 +85,7 @@ router.get('/result', function(req, res, next) {
 
 
   res.render('index', { title: 'Express' });
-});
+}); */
 
 
 
