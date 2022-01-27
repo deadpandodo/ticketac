@@ -62,19 +62,23 @@ router.post('/search-trip', async function(req, res, next) {
 
   console.log(req.body)
 
-  var hack_date = "2018-11-22"
+
+  var hack_from   = req.body.from
+  var hack_to     = req.body.to
+  var hack_date   = req.body.date
+  
+  hack_from       = "Paris"
+  hack_to         = "Lille"
+  hack_date       = "2018-11-22"
 
   var journeys_found = await journeyModel.find({
-    departure: req.body.from,
-    arrival: req.body.to,
-    date: hack_date//req.body.date,
+    departure: hack_from,
+    arrival: hack_to,
+    date: hack_date
   })
   console.log(journeys_found)
 
-
-
-
-  res.redirect('homepage');
+  res.render('result', { journeys:journeys_found });
 });
 
 
