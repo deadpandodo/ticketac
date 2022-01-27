@@ -50,7 +50,10 @@ router.post('/signin', async function(req, res, next) {
 
 /* SEARCH PAGE */
 router.get('/homepage', function(req, res, next) {
-  res.render('homepage', {  });
+
+
+
+  res.render('homepage', { city:city, date:date });
 });
 
 
@@ -59,8 +62,19 @@ router.post('/search-trip', async function(req, res, next) {
 
   console.log(req.body)
 
+  var hack_date = "2018-11-22"
 
-  res.render('result', {  });
+  var journeys_found = await journeyModel.find({
+    departure: req.body.from,
+    arrival: req.body.to,
+    date: hack_date//req.body.date,
+  })
+  console.log(journeys_found)
+
+
+
+
+  res.redirect('homepage');
 });
 
 
