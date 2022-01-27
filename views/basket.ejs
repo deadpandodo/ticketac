@@ -50,7 +50,7 @@
                     <tr>
                       <th scope="row"><%= i+1 %></th>
                       <td><%= basket[i].departure %> / <%= basket[i].arrival %></td>
-                      <td><%= basket[i].date %></td>
+                      <td><%= date_format(basket[i].date) %></td>
                       <td><%= basket[i].departureTime %></td>
                       <td><%= basket[i].price %></td>
                     </tr>
@@ -79,7 +79,7 @@
 
       <div class="row mt-2 mb-5 p-3 ">
         <div class="col-6 d-flex justify-content-start">
-          <a class="btn btn-info" href="" >Add another trip</a>
+          <a class="btn btn-info" href="homepage" >Add another trip</a>
         </div>        
         <div class="col-6 d-flex justify-content-end">
           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal"> Confirm </button>

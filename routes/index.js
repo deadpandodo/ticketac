@@ -10,9 +10,8 @@ var date = ["2018-11-20","2018-11-21","2018-11-22","2018-11-23","2018-11-24"]
 /* 
 TODO
 - User Sessions (stock also the id for the calls)
-- take care of dates in basket & last trips
+- adjust user id in calls
 - style the nav items
-
  */
 
 
@@ -36,7 +35,6 @@ router.post('/signup', async function(req, res, next) {
     });
   var userSaved = await newUser.save();
 
-
   res.render('index', {});
 });
 
@@ -44,114 +42,131 @@ router.post('/signup', async function(req, res, next) {
 /* SIGNIN */
 router.post('/signin', async function(req, res, next) {
 
-  console.log(req.body)
+  req.session.user_logged = false
   var user = await userModel.findOne({email: req.body.email, password: req.body.password})
-  console.log(user)
   if (user === null) {
     res.redirect('/')
   } else {
-    res.render('homepage', {});
+    req.session.user = user
+    req.session.user_logged = true
+    res.render('homepage', {city:city, date:date});
   }
 });
 
 
 /* SEARCH PAGE */
 router.get('/homepage', function(req, res, next) {
-
-
-
-  res.render('homepage', { city:city, date:date });
+  if (req.session.user_logged === true) {
+    res.render('homepage', { city:city, date:date });
+  } else {
+    res.redirect('/')
+  }
 });
 
 
 /* RESULT : Either no train or show the trains */
 router.post('/search-trip', async function(req, res, next) {
+  if (req.session.user_logged === true) {
+    var from   = req.body.from
+    var to     = req.body.to
+    var date   = req.body.date
+    
+    if (req.body.from === "") {from = "Paris"}
+    if (req.body.to   === "") {to   = "Lille"}
+    if (req.body.date === "") {date = "2018-11-22"}
 
-  console.log(req.body)
+    var journeys_found = await journeyModel.find({
+      departure: from,
+      arrival: to,
+      date: date
+    })
+    console.log(journeys_found)
 
-
-  var hack_from   = req.body.from
-  var hack_to     = req.body.to
-  var hack_date   = req.body.date
+    res.render('result', { journeys:journeys_found, date:date });
   
-  hack_from       = "Paris"
-  hack_to         = "Lille"
-  hack_date       = "2018-11-22"
-
-  var journeys_found = await journeyModel.find({
-    departure: hack_from,
-    arrival: hack_to,
-    date: hack_date
-  })
-  console.log(journeys_found)
-
-  res.render('result', { journeys:journeys_found, date:hack_date });
+  } else {
+    res.redirect('/')
+  }
+  
 });
 
 
 /* RESULT : Either no train or show the trains */
 router.get('/add-trip-to-basket', async function(req, res, next) {
 
-  console.log(req.query)
-
-  if (req.session.planned_trips === undefined) {
-    req.session.planned_trips = []
+  if (req.session.user_logged === true) {
+    if (req.session.planned_trips === undefined) {
+      req.session.planned_trips = []
+    } else {   
+    }
+    req.session.planned_trips.push(req.query.id)
+  
+    // Fetch data of the planned_trips
+    var basket = []
+    for (let i=0; i<req.session.planned_trips.length;i++) {
+      basket[i] = await journeyModel.findById(req.session.planned_trips[i])
+    }
+    console.log(basket)
+    res.render('basket', { basket: basket });
+  
   } else {
-    
+    res.redirect('/')
   }
-  req.session.planned_trips.push(req.query.id)
-
-  // Fetch data of the planned_trips
-  var basket = []
-
-  for (let i=0; i<req.session.planned_trips.length;i++) {
-    basket[i] = await journeyModel.findById(req.session.planned_trips[i])
-  }
-
-  console.log(basket)
- 
-  res.render('basket', { basket: basket });
+  
 });
 
 
 /* PAYMENT CONFIRM */
 router.get('/payment-confirm', async function(req, res, next) {
 
-  console.log(req.query.data)
-  var trips_to_save = JSON.parse(req.query.data)
-  console.log(trips_to_save)
+  if (req.session.user_logged === true) {
+    console.log(req.query.data)
+    var trips_to_save = JSON.parse(req.query.data)
+    console.log(trips_to_save)
+    
+    req.session.planned_trips = []
+
+    var fake_id = "61f27f8b864b0c0b1e5c73bf"
+    // Fetch user
+    var user = await userModel.findById(fake_id)
+
+    // Update user trips
+    for (let i=0; i<trips_to_save.length;i++){
+      user.trips.push(trips_to_save[i])
+    }
+
+    // Save user trips
+    await userModel.updateOne(
+      { _id: fake_id},
+      { trips: user.trips }
+    );
+  res.render('payment-confirm', {});
   
-
-  var fake_id = "61f27f8b864b0c0b1e5c73bf"
-  // Fetch user
-  var user = await userModel.findById(fake_id)
-
-  // Update user trips
-  for (let i=0; i<trips_to_save.length;i++){
-    user.trips.push(trips_to_save[i])
+  } else {
+    res.redirect('/')
   }
 
-  // Save user trips
-  await userModel.updateOne(
-    { _id: fake_id},
-    { trips: user.trips }
- );
 
- 
-  res.render('payment-confirm', {});
+
+  
 });
 
 /* LAST TRIPS */
 router.get('/last-trips', async function(req, res, next) {
-
-  console.log(req.query.data)
+  if (req.session.user_logged === true) {
+    console.log(req.query.data)
   
-  var fake_id = "61f27f8b864b0c0b1e5c73bf"
-  var user_data = await userModel.findById(fake_id)
-  var last_trips = user_data.trips
-  console.log(last_trips)
- 
-  res.render('last-trips', {last_trips:last_trips});
+    var fake_id = "61f27f8b864b0c0b1e5c73bf"
+    var user_data = await userModel.findById(fake_id)
+    var last_trips = user_data.trips
+    console.log(last_trips)
+  
+    res.render('last-trips', {last_trips:last_trips});
+    
+  } else {
+    res.redirect('/')
+  }
+  
 });
 
 

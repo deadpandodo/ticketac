@@ -24,31 +24,25 @@
             <form class="d-flex flex-row" action="search-trip" method="POST">
               
               <select class="form-select mx-2" name = "from">
-                <option selected>From: Paris, Marseille...</option>
+                <option value="" selected>From: Paris, Marseille...</option>
                 <% for (let i=0;i<city.length;i++) { %>
                   <option value="<%= city[i] %>"><%= city[i] %></option>
                 <% } %>
               </select>
 
               <select class="form-select mx-2" name = "to">
-                <option selected>To: Lille, Nantes...</option>
+                <option value="" selected>To: Lille, Nantes...</option>
                 <% for (let i=0;i<city.length;i++) { %>
                   <option value="<%= city[i] %>"><%= city[i] %></option>
                 <% } %>
               </select>
 
               <select class="form-select mx-2" name = "date">
-                <option selected>On the : </option>
+                <option value="" selected>On the : </option>
                 <% for (let i=0;i<date.length;i++) { %>
                   <option value="<%= date[i] %>"><%= date[i] %></option>
                 <% } %>
               </select>
-
-<!-- 
-              <input type="text" name = "from" class="form-control  mx-2 " id="from" placeholder="From: Paris, Marseille...">
-              <input type="text" name = "to" class="form-control  mx-2" id="to" placeholder="To: Lille, Nantes...">
-              <input type="date" name = "date" class="form-control mx-2" id="startDate" >
- -->
 
               <button type="submit" class="btn btn-danger  mx-2">GO</button>
             </form>

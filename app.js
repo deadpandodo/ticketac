@@ -17,6 +17,14 @@ var models = require('./routes/index')
 var app = express();
 
 
+app.locals.date_format = function (UTCDate) {
+  // Takes a UTC date and return a DAY/MONTH/YEAR string
+  let date = new Date(UTCDate)
+  let returned_date = date.getDate() +'/'+ (Number(date.getMonth())+1) +'/'+  date.getFullYear()
+  console.log(returned_date)
+  return returned_date
+}
+
 app.use(
   session({
    secret: 'a4f8071f-c873-4447-8ee2',
