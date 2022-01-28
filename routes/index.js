@@ -53,7 +53,8 @@ router.post('/signup', async function(req, res, next) {
                   password: req.body.password
                   });
                 var userSaved = await newUser.save();
-                req.session.user = user
+                req.session.user = userSaved
+                console.log(req.session.user)
                 req.session.user_logged = true
                 res.redirect('homepage');
           }
@@ -190,7 +191,7 @@ router.get('/payment-confirm', async function(req, res, next) {
 router.get('/last-trips', async function(req, res, next) {
   if (req.session.user_logged === true) {
     console.log(req.query.data)
-  
+    console.log(req.session.user)
     var _id = req.session.user._id
     var user_data = await userModel.findById(_id)
     var last_trips = user_data.trips
