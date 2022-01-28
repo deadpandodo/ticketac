@@ -40,7 +40,7 @@ router.post('/signup', async function(req, res, next) {
   //console.log(user)
   if (user === null) {
 
-    if (  req.body.email === null || trim(req.body.email) === "" || req.body.password === null || trim(req.body.password) === "" ){
+    if (  req.body.email === null || req.body.email.trim() === "" || req.body.password === null || req.body.password.trim() === "" ){
 
       var info = encodeURIComponent('Email or password missing !');
       res.redirect('/?info=' + info);           
