@@ -40,11 +40,15 @@
 
       </div>
 
+      <div class="row mt-5">
+        <div class="col-12 d-flex justify-content-center">
+          <% if(info === "") {} else { %>
+            <h3><%= info %></h3>
+          <% } %>
+        </div>
+      </div>
 
     </div>
-
-
-
     <%- include("_scripts") %>
   </body>
 </html>

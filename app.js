@@ -25,9 +25,14 @@ app.locals.date_format = function (UTCDate) {
   return returned_date
 }
 
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+
 app.use(
   session({
-   secret: 'a4f8071f-c873-4447-8ee2',
+   secret: process.env.SESSION_SK,
    resave: false,
    saveUninitialized: false,
   })

@@ -9,15 +9,21 @@ var date = ["2018-11-20","2018-11-21","2018-11-22","2018-11-23","2018-11-24"]
 
 /* 
 TODO
-- User Sessions (stock also the id for the calls)
-- adjust user id in calls
-- style the nav items
+- move user to users.js
+- security : 
+  - session secret
+  - db link
  */
 
 
 /* INDEX */
 router.get('/', function(req, res, next) {
-  res.render('index', { });
+  var info = req.query.info
+  console.log("info : " + info)
+  if (info === undefined && info === null) {
+    info = ""
+  }
+  res.render('index', { info:info });
 });
 
 router.get('/logout', function(req, res, next) {
@@ -30,18 +36,33 @@ router.get('/logout', function(req, res, next) {
 /* SIGNUP */
 router.post('/signup', async function(req, res, next) {
 
-  console.log(req.body)
-  var user = userModel.findOne({email: req.body.email, password: req.body.password})
+  var user = await userModel.findOne({email: req.body.email})
+  //console.log(user)
+  if (user === null) {
 
-  var newUser = new userModel ({
-    email: req.body.email,
-    lastname: req.body.lastname,
-    firstname: req.body.firstname,
-    password: req.body.password
-    });
-  var userSaved = await newUser.save();
+    if (  req.body.email === null || trim(req.body.email) === "" || req.body.password === null || trim(req.body.password) === "" ){
 
-  res.render('index', {});
+      var info = encodeURIComponent('Email or password missing !');
+      res.redirect('/?info=' + info);           
+
+    } else {
+                var newUser = new userModel ({
+                  email: req.body.email,
+                  lastname: req.body.lastname,
+                  firstname: req.body.firstname,
+                  password: req.body.password
+                  });
+                var userSaved = await newUser.save();
+                req.session.user = user
+                req.session.user_logged = true
+                res.redirect('homepage');
+          }
+
+  } else {
+    var info = encodeURIComponent('Email already in use !');
+    res.redirect('/?info=' + info);
+  }
+  
 });
 
 
@@ -49,13 +70,21 @@ router.post('/signup', async function(req, res, next) {
 router.post('/signin', async function(req, res, next) {
 
   req.session.user_logged = false
-  var user = await userModel.findOne({email: req.body.email, password: req.body.password})
+  var user = await userModel.findOne({email: req.body.email})
+
   if (user === null) {
-    res.redirect('/')
+    var info = encodeURIComponent('No user with such email!');
+    res.redirect('/?info=' + info);
   } else {
-    req.session.user = user
-    req.session.user_logged = true
-    res.render('homepage', {city:city, date:date});
+      if (req.body.password === user.password) {
+        req.session.user = user
+        req.session.user_logged = true
+        //res.render('homepage', {city:city, date:date});
+        res.redirect('homepage')
+      } else {
+        var info = encodeURIComponent('Wrong password !');
+        res.redirect('/?info=' + info);
+      }
   }
 });
 
@@ -132,9 +161,9 @@ router.get('/payment-confirm', async function(req, res, next) {
     
     req.session.planned_trips = []
 
-    var fake_id = "61f27f8b864b0c0b1e5c73bf"
+    var _id = req.session.user._id
     // Fetch user
-    var user = await userModel.findById(fake_id)
+    var user = await userModel.findById(_id)
 
     // Update user trips
     for (let i=0; i<trips_to_save.length;i++){
@@ -143,7 +172,7 @@ router.get('/payment-confirm', async function(req, res, next) {
 
     // Save user trips
     await userModel.updateOne(
-      { _id: fake_id},
+      { _id: _id},
       { trips: user.trips }
     );
   res.render('payment-confirm', {});
@@ -162,8 +191,8 @@ router.get('/last-trips', async function(req, res, next) {
   if (req.session.user_logged === true) {
     console.log(req.query.data)
   
-    var fake_id = "61f27f8b864b0c0b1e5c73bf"
-    var user_data = await userModel.findById(fake_id)
+    var _id = req.session.user._id
+    var user_data = await userModel.findById(_id)
     var last_trips = user_data.trips
     console.log(last_trips)
   

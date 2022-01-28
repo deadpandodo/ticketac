@@ -1,5 +1,13 @@
 var mongoose = require("mongoose")
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+
+
+//console.log(process.env.DB_LOGIN)
+//console.log(process.env.DB_PASSWORD)
+//console.log(process.env.DB_NAME)
 
 var options = {
     connectTimeoutMS: 5000,
@@ -8,7 +16,7 @@ var options = {
    };
   
   // --------------------- BDD -----------------------------------------------------
-  mongoose.connect('mongodb+srv://admin:dimitri@cluster0.wp3my.mongodb.net/ticketacdb?retryWrites=true&w=majority',
+  mongoose.connect('mongodb+srv://'+process.env.DB_LOGIN+':'+process.env.DB_PASSWORD+'@cluster0.wp3my.mongodb.net/'+process.env.DB_NAME+'?retryWrites=true&w=majority',
      options,
      function(err) {
       if (err) {
