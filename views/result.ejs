@@ -35,7 +35,7 @@
                     <h5><%= journeys[i].departure %> / <%= journeys[i].arrival %></h5>
                   </div>
                   <div class="col-6 d-flex justify-content-center">
-                    <h6>Train departure at : <%= journeys[i].departureTime %></h6>
+                    <h6>Train departure at : <%= return_am_pm(journeys[i].departureTime) %></h6>
                   </div>
                   <div class="col-1 d-flex justify-content-center">
                     <h3><%= journeys[i].price %>€</h3>

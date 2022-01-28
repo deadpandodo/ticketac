@@ -38,7 +38,7 @@
                     <tr>
                       <th scope="row"><%= date_format(last_trips[i].date) %></th>
                       <td><%= last_trips[i].departure %> / <%= last_trips[i].arrival %></td>
-                      <td><%= last_trips[i].departureTime %></td>
+                      <td><%= return_am_pm(last_trips[i].departureTime) %></td>
                       <td><%= last_trips[i].price %> €</td>
                     </tr>
                   <% } %>

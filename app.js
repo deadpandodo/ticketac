@@ -25,6 +25,19 @@ app.locals.date_format = function (UTCDate) {
   return returned_date
 }
 
+app.locals.return_am_pm = function (aTime) {
+  // Takes a time (either x:xx or xx:xx) and return a x:xx AM or PM
+  let time_array = aTime.split(":")
+  let returned_time
+  if (Number(time_array[0] < 12)) {
+    returned_time = aTime + "am"
+  } else {
+    returned_time = aTime + "pm"
+  }
+  console.log(returned_time)
+  return returned_time
+}
+
 
 const dotenv = require('dotenv');
 dotenv.config();
